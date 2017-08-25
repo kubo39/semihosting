@@ -27,22 +27,21 @@ enum MODE : uint
     W_TRUNC = 4,
 }
 
-// uint syscall(uint nr, const uint* arg)
-uint syscall(uint nr, const uint* arg)
+int syscall(uint nr, const uint* arg) pure
 {
     return __asm!int("bkpt 0xAB", "={r0}, ~{r0}, ~{r1}", nr, arg);
 }
 
-int open(in string name, MODE mode)
+int open(in string name, MODE mode) pure
 {
     const uint[3] arg = [cast(uint) name.ptr, mode, name.length - 1];
-    return cast(int) syscall(SYS.OPEN, arg.ptr);
+    return syscall(SYS.OPEN, arg.ptr);
 }
 
-int write(int fd, in ubyte* ptr, uint len)
+int write(int fd, in ubyte* ptr, uint len) pure
 {
     const uint[3] arg = [cast(uint) fd, cast(uint) ptr, len];
-    return cast(int) syscall(SYS.WRITE, arg.ptr);
+    return syscall(SYS.WRITE, arg.ptr);
 }
 
 void writeBuffer(in ubyte[] buffer)
