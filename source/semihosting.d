@@ -6,7 +6,6 @@ version (LDC)
 }
 
 version(ARM_Thumb):
-extern(C):
 @nogc:
 nothrow:
 
@@ -85,7 +84,14 @@ void writeBuffer(in ubyte[] buffer)
     }
 }
 
-void writeString(in string s)
+void write(in string s)
 {
     writeBuffer(cast(const ubyte[]) s);
+}
+
+void writeln(in string s)
+{
+    writeBuffer(cast(const ubyte[]) s);
+    const ubyte[1] lf = ['\n'];
+    writeBuffer(lf);
 }
